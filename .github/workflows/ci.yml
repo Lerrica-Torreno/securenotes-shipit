@@ -1,24 +1,38 @@
-# SecureNotes CI — STUDENT STARTER  (Week 17, Part B)
-#
-# Right now this workflow does nothing. Build it so that every push and every
-# pull request to main runs the FULL test suite on a clean machine. When it's
-# right, `pytest tests/test_pipeline.py` goes green here, and the Actions tab
-# shows a green check after you push.
-#
-# You need (see the handout and the Week 17 lecture):
-#   on:     triggers for push AND pull_request to main
-#   jobs:   one job, runs-on ubuntu-latest, with steps that
-#             1. check out the code        (actions/checkout@v4)
-#             2. set up Python             (actions/setup-python@v5)
-#             3. install dependencies      (pip install -r requirements.txt)
-#             4. run the tests             (pytest)
 
-name: CI
+# SecureNotes CI — Week 17 Laboratory
 
-# >>> TASK 6: add the triggers (push + pull_request on main)
+name: SecureNotes CI
+
+# TASK 6: Run on pushes and pull requests to main
 on:
-# <<< END TASK 6
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-# >>> TASK 7: add a `test` job that runs on ubuntu-latest with the four steps
+# TASK 7: Test job
 jobs:
-# <<< END TASK 7
+  test:
+    name: Run SecureNotes Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Step 4: Run all tests
+      - name: Run the full test suite
+        run: pytest -q
